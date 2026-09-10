@@ -2135,9 +2135,21 @@ GRANT ALL ON TABLE public.user_wsender_sessions TO service_role;
 
 
 
+CREATE TABLE public.lms_notification_queue (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    message_text text NOT NULL,
+    recipient_number text NOT NULL,
+    status text DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'sent', 'failed')),
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.lms_notification_queue ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.lms_notification_queue TO service_role;
+
 --
 -- PostgreSQL database dump complete
 --
 
 \unrestrict GCoNOs7mBfXioTfTnsPcdgMmKCwWOcfA0SlfN3WrM1XpO6Nhmj9aKeXA6JwDskO
-

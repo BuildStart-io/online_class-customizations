@@ -37,5 +37,27 @@ SELECT cron.schedule(
   $$
 );
 
+-- LMS Notifications processor
+SELECT cron.schedule(
+  'process-lms-notifications',
+  '* * * * *',
+  $$
+  SELECT net.http_post(
+    url     := '<FUNCTIONS_URL>/process-lms-notifications',
+    headers := '{"Content-Type":"application/json","Authorization":"Bearer <SERVICE_ROLE_KEY>"}'::jsonb,
+    body    := '{}'::jsonb
+  );
+  $$
+);
+
+-- LMS Notifications cleanup (Delete sent messages older than 7 days)
+SELECT cron.schedule(
+  'cleanup-lms-queue',
+  '0 2 * * *',
+  $$
+  DELETE FROM lms_notification_queue WHERE status = 'sent' AND created_at < now() - interval '7 days';
+  $$
+);
+
 -- Inspect:  SELECT jobid, jobname, schedule FROM cron.job;
 -- Remove:   SELECT cron.unschedule('drain-message-queue');
