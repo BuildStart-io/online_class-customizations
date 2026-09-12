@@ -22,10 +22,7 @@ serve(async (req) => {
       );
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!
-    );
+    const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { db: { schema: "onlineclass_customization" } });
 
     // Authenticate the user
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -43,10 +40,7 @@ serve(async (req) => {
     const userId = authData.user.id;
 
     // Use service role to upsert the token (bypasses RLS)
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const supabaseAdmin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { db: { schema: "onlineclass_customization" } });
 
     const { error: upsertError } = await supabaseAdmin
       .from("fcm_tokens")

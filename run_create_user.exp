@@ -1,0 +1,8 @@
+#!/usr/bin/expect -f
+set timeout -1
+spawn bash -c "scp -o StrictHostKeyChecking=no create_user.sql root@178.104.127.220:/root/create_user.sql && ssh -o StrictHostKeyChecking=no root@178.104.127.220 'docker exec -i supabase-db psql -U postgres -d postgres < /root/create_user.sql'"
+expect "password:"
+send "voibVmIdk9DqPMmZ\r"
+expect "password:"
+send "voibVmIdk9DqPMmZ\r"
+expect eof

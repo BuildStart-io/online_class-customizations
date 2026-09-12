@@ -13,7 +13,7 @@ serve(async (req) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  const supabase = createClient(supabaseUrl, supabaseServiceKey, { db: { schema: "onlineclass_customization" } });
 
   console.log(`[process-lms-notifications] Triggered by cron`);
 
@@ -54,7 +54,7 @@ serve(async (req) => {
 
       console.log(`Sending to ${msg.recipient_number}`);
 
-      const res = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp`, {
+      const res = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-onlineclass`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${supabaseServiceKey}`,

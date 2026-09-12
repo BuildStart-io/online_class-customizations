@@ -76,12 +76,12 @@ async function resolveOwner(req: Request): Promise<{ ownerId: string; userId: st
   const token = authHeader.replace(/^Bearer\s+/i, "").trim();
   if (!token) return null;
 
-  const authClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const authClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: "onlineclass_customization" } });
   const { data, error } = await authClient.auth.getClaims(token);
   const userId = (data as any)?.claims?.sub;
   if (error || !userId) return null;
 
-  const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+  const admin = createClient(SUPABASE_URL, SERVICE_KEY, { db: { schema: "onlineclass_customization" } });
   const { data: staff } = await admin
     .from("staff_accounts")
     .select("owner_id")
@@ -138,7 +138,7 @@ serve(async (req) => {
         return json({ error: `Upload failed (${put.status})`, details: text.slice(0, 300) }, put.status);
       }
 
-      const publicUrl = `${ENDPOINT}/${bucket}/${key}`;
+      const publicUrl = `${ENDPOINT}/${bucket}/${key}`.replace(/^https?:\/\/[^\/]+/, "https://supabase.buildstart.io");
       console.log(`Uploaded ${publicUrl} (${body.length} bytes)`);
       return json({ url: publicUrl, key, bucket });
     }

@@ -94,10 +94,7 @@ serve(async (req) => {
     }
 
     // Get all device tokens for this user
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const supabaseAdmin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { db: { schema: "onlineclass_customization" } });
 
     const { data: tokens, error } = await supabaseAdmin
       .from("fcm_tokens")
