@@ -28,8 +28,8 @@ interface PlanLimits {
 
 const defaultLimits: PlanLimits = {
   free: { max_products: 5, max_faqs: 10, max_orders_per_month: 50, contacts_per_month: 50, ai_messages_per_month: 100, max_images_per_product: 1 },
-  pro: { max_products: 50, max_faqs: 100, max_orders_per_month: 500, contacts_per_month: 300, ai_messages_per_month: 2000, max_images_per_product: 5 },
-  enterprise: { max_products: 999, max_faqs: 999, max_orders_per_month: 9999, contacts_per_month: 1500, ai_messages_per_month: 99999, max_images_per_product: 10 },
+  pro: { max_products: 10, max_faqs: 40, max_orders_per_month: 200, contacts_per_month: 500, ai_messages_per_month: 2000, max_images_per_product: 10 },
+  enterprise: { max_products: 20, max_faqs: 70, max_orders_per_month: 1000, contacts_per_month: 2000, ai_messages_per_month: 99999, max_images_per_product: 50 },
 };
 
 export default function AdminSettings() {
