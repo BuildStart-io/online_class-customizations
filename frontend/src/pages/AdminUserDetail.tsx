@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Loader2, Package, HelpCircle, ShoppingCart, Pencil, Trash2, Plus, MessageSquare, CreditCard, KeyRound, Users } from "lucide-react";
+import { ArrowLeft, Loader2, Package, HelpCircle, ShoppingCart, Pencil, Trash2, Plus, MessageSquare, CreditCard, KeyRound, Users, Copy } from "lucide-react";
 import VariationEditor, { type Variation } from "@/components/products/VariationEditor";
 import AdminBillingManager from "@/components/admin/AdminBillingManager";
 import AdminUsageStats from "@/components/admin/AdminUsageStats";
@@ -236,7 +236,19 @@ export default function AdminUserDetail() {
             <h1 className="text-2xl font-bold tracking-tight">
               {profile?.business_name || profile?.full_name || "Account"}
             </h1>
-            <p className="text-muted-foreground">{profile?.email}</p>
+            <p className="text-muted-foreground mb-2">{profile?.email}</p>
+            {profile?.user_id && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-2 py-1.5 rounded-md w-fit border">
+                <span className="font-semibold text-foreground text-xs">CRM Key:</span>
+                <code className="text-xs select-all">{profile.user_id}</code>
+                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                  navigator.clipboard.writeText(profile.user_id);
+                  toast({ title: "CRM Integration Key copied!" });
+                }}>
+                  <Copy className="h-3 w-3" />
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex gap-2 items-center">
             <Button variant="outline" size="sm" onClick={() => { setNewPassword(""); setConfirmPassword(""); setPasswordDialogOpen(true); }}>
