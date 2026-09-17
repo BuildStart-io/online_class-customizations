@@ -52,7 +52,13 @@ serve(async (req) => {
           await new Promise(r => setTimeout(r, 5000));
       }
 
-      console.log(`Sending to ${msg.recipient_number}`);
+      let sessionApiKey = Deno.env.get("WAHA_DEFAULT_SESSION") || "default";
+      const { data: sessionData } = await supabase.from("user_wsender_sessions").select("session_id").limit(1).maybeSingle();
+      if (sessionData && sessionData.session_id) {
+          sessionApiKey = sessionData.session_id;
+      }
+
+      console.log(`Sending to ${msg.recipient_number} with session ${sessionApiKey}`);
 
       const res = await fetch(`${supabaseUrl}/functions/v1/send-whatsapp-onlineclass`, {
         method: "POST",
@@ -63,7 +69,7 @@ serve(async (req) => {
         body: JSON.stringify({ 
             to: msg.recipient_number, 
             message: msg.message_text,
-            sessionApiKey: Deno.env.get("WAHA_DEFAULT_SESSION") || "default"
+            sessionApiKey: sessionApiKey
         }),
       });
 
